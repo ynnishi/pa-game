@@ -31,7 +31,7 @@ namespace Communication
         public GameObject exitObject;
         public Text textExit;
         private bool isHaguruma = false;
-        public int backNumber;
+        private int backNumber;
 
         // 背景用
         private int timer = 0;
@@ -241,7 +241,7 @@ namespace Communication
                 {
                     //成功時の処理
                     Debug.Log("解答データ取得成功");
-                    RelationFromList = _ncmbObjectList;
+                    AnswerList = _ncmbObjectList;
                     isConnecting = false;
                 } 
             });
@@ -585,6 +585,7 @@ namespace Communication
         // Start is called before the first frame update
         void Start()
         {
+            backNumber = UnityEngine.Random.Range(0, 2);
             SetBackCharaSprite();
         }
 
@@ -598,13 +599,13 @@ namespace Communication
             backImage2.transform.localPosition = new Vector3(-timer/5+800,0,0);
             //for(int i=0; i<3; i++){
 
-            int p = timer % 1000;
-            if(p < 250){
-                angle = p/25; //1～10
-            }else if(p < 750){
-                angle = 20-p/25; //10～-10(10～30)
+            int p = timer % 200;
+            if(p < 50){
+                angle = p/5; //1～10
+            }else if(p < 150){
+                angle = 20-p/5; //10～-10(10～30)
             }else{
-                angle = p/25-40; //-10～0(30～40)
+                angle = p/5-40; //-10～0(30～40)
             }
 
             if(backNumber == 0){

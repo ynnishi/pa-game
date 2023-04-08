@@ -27,6 +27,7 @@ namespace Communication
         public GameObject memberObject;
         public GameObject flameObject;
         public GameObject[] buttonPlayerName = new GameObject[PlayerKey.MAX_MEMBER_NUM];
+        public GameObject[] buttonRsultName = new GameObject[PlayerKey.MAX_ENTRY_NUM];
         public GameObject[] imageMarker = new GameObject[PlayerKey.MAX_ENTRY_NUM];
         public Text[] textMarker = new Text[PlayerKey.MAX_ENTRY_NUM];
 
@@ -284,6 +285,8 @@ namespace Communication
                                 if(textPlayerName[i].text == dataManager.PlayerList[k]["Name"] as string){
                                     int number = Int32.Parse(dataManager.PlayerList[k]["Order"] as string);
                                     //Debug.Log("順番：" + number);
+                                    Debug.Log("dataManager.PlayerList[Theme]：" + dataManager.PlayerList[k]["Theme"]);
+                                    Debug.Log("[number-1]：" + (number-1));
                                     entryMemberArr[number-1] = dataManager.PlayerList[k]["Name"] as string;
                                     actNumberArr[number-1] = dataManager.PlayerList[k]["Theme"] as string;
                                 }
@@ -304,6 +307,15 @@ namespace Communication
                         }
                     }
                 }
+
+                for(int i=0; i<PlayerKey.MAX_ENTRY_NUM; i++){
+                    if(i < entryNumber){
+                        buttonRsultName[i].SetActive(true);
+                    }else{
+                        buttonRsultName[i].SetActive(false);
+                    }
+                }
+                
 
                 for(int i=0; i<entryNumber; i++){
                     if(actNumberArr[i] == "A"){
@@ -380,33 +392,6 @@ namespace Communication
             isOpen[i] = true;
         }
 
-        private void ShowResult()
-        {
-            answerObject.SetActive(true);
-
-            float period = 930/dataManager.PlayerList.Count;
-
-            for(int i=0; i<dataManager.PlayerList.Count; i++){
-                buttonPlayerName[i].SetActive(true);
-                buttonPlayerName[i].transform.localPosition = new Vector3(-260,360-i*period,0.0f);
-                textPlayerVote[i].transform.localPosition = new Vector3(80,363-i*period,0.0f);
-                
-                string a = "";
-                for(int j=0; j<entryNumber; j++){
-                    string voteStr = "Vote_" + (j+1);
-
-                    //Debug.Log(dataManager.PlayerList[i]["Name"]);
-                    
-                    if(dataManager.PlayerList[i][voteStr] == ""){
-                        a += " ×";
-                    }else{
-                        a += " " + dataManager.PlayerList[i][voteStr] as string;
-                    }
-                }                
-                textPlayerVote[i].GetComponent<Text>().text = a;
-            }
-        }
-
         public void PushButtonResult()
         {
             gameEndObject.SetActive(true);
@@ -448,7 +433,6 @@ namespace Communication
 
                 if(!flagResult){
                     if(time >= 2.0f){
-                        //ShowResult();
                         flagResult = true;
                     }else if(time >= 1.5f){
                         DisplayMessage("タップして正解を確認！");
@@ -465,12 +449,22 @@ namespace Communication
 
                 int openNumber = 0;
 
-                for(int i=0; i<entryNumber; i++){
-                    if(isOpen[i]){          
+                for(int i=0; i<PlayerKey.MAX_ENTRY_NUM; i++){
+                    if(isOpen[i]){     
                         rotate[i]+=1;
-                        //textMarker[i].GetComponent<Text>().text = actNumberArr[i];
                         if(rotate[i] == 90){
-                            textMarker[i].GetComponent<Text>().text = actNumberArr[i];
+                            //Debug.Log("actNumberArr[i]:" + actNumberArr[i]);
+                            string str = "";
+                            if(i==0) str = "A";
+                            else if(i==1) str = "B";
+                            else if(i==2) str = "C";
+                            else if(i==3) str = "D";
+                            else if(i==4) str = "E";
+                            else if(i==5) str = "F";
+                            else if(i==6) str = "G";
+                            else if(i==7) str = "H";
+
+                            textMarker[i].GetComponent<Text>().text = str;
                             imageMarker[i].transform.Rotate(0,180,0);
                         }else if(rotate[i] <= 180){
                             imageMarker[i].transform.Rotate(0,1,0);

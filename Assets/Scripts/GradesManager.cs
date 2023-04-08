@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using TMPro;
 
 namespace Communication
 {
@@ -14,6 +15,7 @@ namespace Communication
         public GameObject gradesObject;
         public GameObject historyObject;
         public GameObject buttonHistory;
+        public GameObject scoreObject;
 
         // ★追加
         private string userName;
@@ -27,7 +29,14 @@ namespace Communication
         public Text textGuessedTop;
         public Text textAccuracyWorst;
         public Text textGuessedWorst;
+        public GameObject[] answerObject = new GameObject[11];
+        public TextMeshProUGUI[] textKadai = new TextMeshProUGUI[11];
+        public Text[] textRate = new Text[11];
 
+        private int historyNumber = 0;
+        public Text textMaru;
+        public Text textBatsu;
+        private bool isScore = false;
         private DataManager dataManager;
 
         // Start is called before the first frame update
@@ -127,10 +136,65 @@ namespace Communication
             textGuessedWorst.GetComponent<Text>().text = maxRateUser;
 
             yield return StartCoroutine(dataManager.SelectAnswerDataCoroutine());
+            
+            Debug.Log("dataManager.AnswerList.Count : " + dataManager.AnswerList.Count);
+
+            SetHistoryLine(historyNumber);
 
             // データ取得完了すればボタンを有効化
             buttonHistory.GetComponent<Button>().interactable = true;
         }        
+
+        public void SetHistoryLine(int nubmer){
+
+            for(int i=0; i<11; i++){
+                if(i < dataManager.AnswerList.Count){
+                    //Debug.Log(i + "," + dataManager.AnswerList[i]["Kadai"] + "," + dataManager.AnswerList[i]["CorrectRate"]);
+                    answerObject[i].SetActive(true);
+                    textKadai[i].text = dataManager.AnswerList[i+nubmer]["Kadai"] as string;
+                    textRate[i].GetComponent<Text>().text = dataManager.AnswerList[i+nubmer]["CorrectRate"] as string + "%";
+                }else{
+                    answerObject[i].SetActive(false);
+                }
+            }
+
+        }
+
+        // お題を押した時の処理 
+        public void PushButtonKdai(int i)
+        {
+            if(!isScore){
+                isScore = true;
+                scoreObject.SetActive(true);
+                textMaru.GetComponent<Text>().text = dataManager.AnswerList[i+historyNumber]["CorrectUser"] as string;
+                textBatsu.GetComponent<Text>().text = dataManager.AnswerList[i+historyNumber]["InCorrectUser"] as string;
+            }
+        }
+
+        public void PushButtonScore(){
+            if(isScore){
+                isScore = false;
+                scoreObject.SetActive(false);
+            }
+        }
+
+        // 「▲」ボタンを選んだ時の処理 
+        public void PushButtonUp()
+        {
+            if(historyNumber > 0){
+                historyNumber -= 1;
+                SetHistoryLine(historyNumber);
+            }
+        }
+
+        // 「▼」ボタンを選んだ時の処理 
+        public void PushButtonDown()
+        {
+            if((historyNumber + 11) < dataManager.AnswerList.Count){
+                historyNumber += 1;
+                SetHistoryLine(historyNumber);
+            }
+        }
 
         // 「成績」ボタンを選んだ時の処理 
         public void PushButtonGrades()
@@ -151,6 +215,8 @@ namespace Communication
         {
             SceneManager.LoadScene("LobbyScene");  
         }
+
+
 
         // ローカルに保存したユーザ情報を取得
         public string LocalSavedUserName

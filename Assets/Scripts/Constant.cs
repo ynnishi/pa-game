@@ -65,6 +65,19 @@ namespace Communication
         public static readonly string PHASE         = "Phase";
     }
 
+    //マーカー用
+    public static class MarkerKey
+    {
+        public static readonly string MarkerKey_0   = "A";
+        public static readonly string MarkerKey_1   = "B";
+        public static readonly string MarkerKey_2   = "C";
+        public static readonly string MarkerKey_3   = "D";
+        public static readonly string MarkerKey_4   = "E";
+        public static readonly string MarkerKey_5   = "F";
+        public static readonly string MarkerKey_6   = "G";
+        public static readonly string MarkerKey_7   = "H";
+    }
+
     //フェーズ管理のフィールド名定義//
     public static class PhaseKey
     {

@@ -173,6 +173,12 @@ namespace Communication
             });
         }
 
+        public void pushButtonBack(){
+            cardObject.SetActive(false);
+            buttonStart.GetComponent<Button>().interactable = true;
+            buttonCard.GetComponent<Button>().interactable = true;
+        }
+
         // ローカルにユーザ登録する処理
         public void SaveLocalUserNameAndPassword(string userName, string password)
         {

@@ -442,8 +442,13 @@ namespace Communication
             yield return StartCoroutine(dataManager.UpdateRoomCoroutine());
 
             string[] voteMemberArr =  voteMemberStr.Split(',');
-            if(voteMemberArr.Length != playerNumber){
-                Debug.Log("voteMemberArr：" + voteMemberArr.Length + ", playerNumber：" + playerNumber);
+            //Debug.Log("turnNumber:" + turnNumber + ", voteMemberStr:" + voteMemberStr);
+            //Debug.Log("playerNumber：" + playerNumber);
+            //Debug.Log("voteMemberArr：" + voteMemberArr.Length + ", playerNumber：" + playerNumber);
+            if(voteMemberStr == ""){
+                //
+            }else if((voteMemberArr.Length + 1) < playerNumber){
+                //Debug.Log("voteMemberArr：" + voteMemberArr.Length + ", playerNumber：" + playerNumber);
             }else{
                 isSelect = false;
                 StartCoroutine(SkipTurnCoroutine());
@@ -532,7 +537,7 @@ namespace Communication
             }else{
                 DisplayMessage("演技終了です！お疲れ様！");
                 dataManager.RoomList[0]["Performer"] = "END";
-                turnNumber = 8;
+                //turnNumber = 8;
                 time = 0;
                 isEnd = true;
             }
